@@ -87,13 +87,14 @@ class Repository
     /**
      * Returns a single document data by ID or null if document is not found.
      *
-     * @param string $id Document Id to find.
+     * @param string $id         Document Id to find.
+     * @param string $resultType Result type returned.
      *
      * @return DocumentInterface|null
      *
      * @throws \LogicException
      */
-    public function find($id)
+    public function find($id, $resultType = self::RESULTS_OBJECT)
     {
         if (count($this->types) !== 1) {
             throw new \LogicException('Only one type must be specified for the find() method');
@@ -111,12 +112,14 @@ class Repository
             return null;
         }
 
-        $converter = new Converter(
-            $this->manager->getTypesMapping(),
-            $this->manager->getBundlesMapping()
-        );
+        if ($resultType === self::RESULTS_OBJECT) {
+            return (new Converter(
+                $this->manager->getTypesMapping(),
+                $this->manager->getBundlesMapping()
+            ))->convertToDocument($result);
+        }
 
-        return $converter->convertToDocument($result);
+        return $this->parseResult($result, $resultType, '');
     }
 
     /**
@@ -137,12 +140,12 @@ class Repository
         $offset = null,
         $resultType = self::RESULTS_OBJECT
     ) {
-        $search = new Search();
+        $search = $this->createSearch();
 
-        if ($limit) {
+        if ($limit !== null) {
             $search->setSize($limit);
         }
-        if ($offset) {
+        if ($offset !== null) {
             $search->setFrom($offset);
         }
 
@@ -381,7 +384,12 @@ class Repository
      */
     private function convertToNormalizedArray($data)
     {
+        if (array_key_exists('_source', $data)) {
+            return $data['_source'];
+        }
+
         $output = [];
+
         if (isset($data['hits']['hits'][0]['_source'])) {
             foreach ($data['hits']['hits'] as $item) {
                 $output[] = $item['_source'];

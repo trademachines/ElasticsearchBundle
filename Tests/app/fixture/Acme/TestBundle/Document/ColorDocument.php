@@ -19,7 +19,7 @@ use ONGR\ElasticsearchBundle\Document\DocumentTrait;
 /**
  * Class ColorDocument.
  *
- * @ES\Document(type="color")
+ * @ES\Document(type="color", all={"enabled": false})
  */
 class ColorDocument extends AbstractDocument
 {
@@ -47,4 +47,29 @@ class ColorDocument extends AbstractDocument
      * )
      */
     public $enabledCdn;
+
+    /**
+     * @var string
+     *
+     * @ES\Property(includeInAll=false, type="string", name="excluded_from_all")
+     */
+    public $excludedFromAll;
+
+    /**
+     * @var string
+     *
+     * @ES\Property(includeInAll=true, type="string", name="included_in_all")
+     */
+    public $includedInAll;
+
+    /**
+     * @var int
+     *
+     * @ES\Property(
+     *     type="string",
+     *     name="pieces_count",
+     *     fields={@ES\MultiField(name="count", type="token_count", analyzer="whitespace")}
+     * )
+     */
+    public $piecesCount;
 }

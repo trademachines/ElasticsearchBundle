@@ -14,6 +14,7 @@ namespace ONGR\ElasticsearchBundle\Mapping;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\Reader;
 use ONGR\ElasticsearchBundle\Annotation\Document;
+use ONGR\ElasticsearchBundle\Annotation\Inherit;
 use ONGR\ElasticsearchBundle\Annotation\MultiField;
 use ONGR\ElasticsearchBundle\Annotation\Property;
 use ONGR\ElasticsearchBundle\Annotation\Skip;
@@ -115,6 +116,7 @@ class DocumentParser
                         '_parent' => $parent === null ? null : ['type' => $parent],
                         '_ttl' => $class->ttl,
                         'enabled' => $class->enabled,
+                        '_all' => $class->all,
                     ],
                     'aliases' => $this->getAliases($reflectionClass),
                     'objects' => $this->getObjects(),
@@ -156,7 +158,7 @@ class DocumentParser
     }
 
     /**
-     * Finds aliases for every property used in document inluding parent classes.
+     * Finds aliases for every property used in document including parent classes.
      *
      * @param \ReflectionClass $reflectionClass
      *
