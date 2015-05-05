@@ -12,7 +12,6 @@
 namespace ONGR\ElasticsearchBundle\DSL\SearchEndpoint;
 
 use ONGR\ElasticsearchBundle\DSL\BuilderInterface;
-use ONGR\ElasticsearchBundle\DSL\ParametersTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
 
 /**
@@ -31,7 +30,7 @@ interface SearchEndpointInterface extends NormalizableInterface
     public function addBuilder(BuilderInterface $builder, $parameters = []);
 
     /**
-     * Returns currectly contained builder.
+     * Returns contained builder.
      *
      * @return BuilderInterface|BuilderInterface[]
      */

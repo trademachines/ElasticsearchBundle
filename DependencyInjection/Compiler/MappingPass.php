@@ -12,7 +12,6 @@
 namespace ONGR\ElasticsearchBundle\DependencyInjection\Compiler;
 
 use ONGR\ElasticsearchBundle\Mapping\MetadataCollector;
-use Psr\Log\LogLevel;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -172,10 +171,10 @@ class MappingPass implements CompilerPassInterface
             $params['connectionParams']['auth'] = array_values($connection['auth']);
         }
 
-        if ($manager['debug']) {
+        if ($manager['debug']['enabled'] === true) {
             $params['logging'] = true;
             $params['logPath'] = $container->getParameter('es.logging.path');
-            $params['logLevel'] = LogLevel::WARNING;
+            $params['logLevel'] = $manager['debug']['level'];
             $params['traceObject'] = new Reference('es.logger.trace');
         }
 
@@ -238,6 +237,7 @@ class MappingPass implements CompilerPassInterface
      * @param ContainerBuilder $container
      *
      * @return array
+     *
      * @throws \LogicException If connection is not found.
      */
     private function setWarmers($connectionDefinition, $connection, ContainerBuilder $container)
