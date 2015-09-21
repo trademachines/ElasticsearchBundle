@@ -59,6 +59,11 @@ final class Property extends AbstractProperty
     public $includeInAll;
 
     /**
+     * @var string
+     */
+    public $localeOnly;
+
+    /**
      * @var float
      */
     public $boost;
