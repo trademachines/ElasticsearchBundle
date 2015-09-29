@@ -231,11 +231,21 @@ class Manager
     }
 
     /**
+     * Sets converter instance.
+     *
+     * @param $converter
+     */
+    public function setConverter($converter)
+    {
+        $this->converter = $converter;
+    }
+
+    /**
      * Returns converter instance.
      *
      * @return Converter
      */
-    private function getConverter()
+    public function getConverter()
     {
         if (!$this->converter) {
             $this->converter = new Converter($this->getTypesMapping(), $this->getBundlesMapping());

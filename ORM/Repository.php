@@ -112,10 +112,7 @@ class Repository
         }
 
         if ($resultType === self::RESULTS_OBJECT) {
-            return (new Converter(
-                $this->getManager()->getTypesMapping(),
-                $this->getManager()->getBundlesMapping()
-            ))->convertToDocument($result);
+            return $this->getManager()->getConverter()->convertToDocument($result);
         }
 
         return $this->parseResult($result, $resultType, '');
@@ -192,10 +189,7 @@ class Repository
                 return null;
             }
 
-            return (new Converter(
-                $this->getManager()->getTypesMapping(),
-                $this->getManager()->getBundlesMapping()
-            ))->convertToDocument($rawData[0]);
+            return $this->getManager()->getConverter()->convertToDocument($rawData[0]);
         }
 
         return $this->parseResult($result, $resultType, '');
@@ -380,7 +374,8 @@ class Repository
                     $iterator = new DocumentScanIterator(
                         $raw,
                         $this->getManager()->getTypesMapping(),
-                        $this->getManager()->getBundlesMapping()
+                        $this->getManager()->getBundlesMapping(),
+                        $this->getManager()->getConverter()
                     );
                     $iterator
                         ->setRepository($this)
@@ -393,7 +388,8 @@ class Repository
                 return new DocumentIterator(
                     $raw,
                     $this->getManager()->getTypesMapping(),
-                    $this->getManager()->getBundlesMapping()
+                    $this->getManager()->getBundlesMapping(),
+                    $this->getManager()->getConverter()
                 );
             case self::RESULTS_ARRAY:
                 return $this->convertToNormalizedArray($raw);

@@ -255,10 +255,7 @@ class JsonReader implements \Countable, \Iterator
     protected function getConverter()
     {
         if (!$this->converter) {
-            $this->converter = new Converter(
-                $this->manager->getTypesMapping(),
-                $this->manager->getBundlesMapping()
-            );
+            $this->converter = $this->manager->getConverter();
         }
 
         return $this->converter;

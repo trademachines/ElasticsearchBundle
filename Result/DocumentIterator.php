@@ -54,15 +54,17 @@ class DocumentIterator extends AbstractResultsIterator
     /**
      * Constructor.
      *
-     * @param array $rawData
-     * @param array $typesMapping
-     * @param array $bundlesMapping
+     * @param array     $rawData
+     * @param array     $typesMapping
+     * @param array     $bundlesMapping
+     * @param Converter $converter
      */
-    public function __construct($rawData, $typesMapping, $bundlesMapping)
+    public function __construct($rawData, $typesMapping, $bundlesMapping, $converter)
     {
         $this->rawData = $rawData;
         $this->typesMapping = $typesMapping;
         $this->bundlesMapping = $bundlesMapping;
+        $this->converter = $converter;
 
         // Alias documents to have shorter path.
         if (isset($rawData['hits']['hits'])) {
@@ -77,10 +79,6 @@ class DocumentIterator extends AbstractResultsIterator
      */
     protected function getConverter()
     {
-        if ($this->converter === null) {
-            $this->converter = new Converter($this->typesMapping, $this->bundlesMapping);
-        }
-
         return $this->converter;
     }
 
