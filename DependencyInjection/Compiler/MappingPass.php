@@ -181,6 +181,10 @@ class MappingPass implements CompilerPassInterface
             $params['traceObject'] = new Reference('es.logger.trace');
         }
 
+        if ($connection['timeout'] > 0) {
+            $params['guzzleOptions']['curl.options'][CURLOPT_CONNECTTIMEOUT] = (float) $connection['timeout'];
+        }
+
         return $params;
     }
 
