@@ -149,13 +149,21 @@ class Connection
     }
 
     /**
-     * Flushes the current query container to the index, used for bulk queries execution.
+     * Persists the current query container to the index, used for bulk queries execution.
+     *
+     * @param bool $flush flush or refresh
+     *
      */
-    public function commit()
+    public function commit($flush = true)
     {
         $this->bulkQueries = array_merge($this->bulkQueries, $this->bulkParams);
         $this->getClient()->bulk($this->bulkQueries);
-        $this->flush();
+
+        if ($flush) {
+            $this->flush();
+        } else {
+            $this->refresh();
+        }
 
         $this->bulkQueries = [];
     }
