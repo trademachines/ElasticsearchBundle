@@ -134,15 +134,17 @@ class Manager
 
     /**
      * Commits bulk batch to elasticsearch index.
+     *
+     * @param bool $flush
      */
-    public function commit()
+    public function commit($flush = true)
     {
         $this->dispatchEvent(
             Events::PRE_COMMIT,
             new ElasticsearchCommitEvent($this->getConnection())
         );
 
-        $this->getConnection()->commit();
+        $this->getConnection()->commit($flush);
 
         $this->dispatchEvent(
             Events::POST_COMMIT,
