@@ -110,7 +110,7 @@ class DocumentScanIterator extends DocumentIterator
         $raw = $this->repository->scan($this->scrollId, $this->scrollDuration, Repository::RESULTS_RAW);
         $this->setScrollId($raw['_scroll_id']);
 
-        $this->documents = array_merge($this->documents, $raw['hits']['hits']);
+        $this->documents = $raw['hits']['hits'];
 
         return isset($this->documents[$this->key]);
     }
