@@ -110,9 +110,21 @@ class DocumentScanIterator extends DocumentIterator
         $raw = $this->repository->scan($this->scrollId, $this->scrollDuration, Repository::RESULTS_RAW);
         $this->setScrollId($raw['_scroll_id']);
 
-        $this->documents = $raw['hits']['hits'];
+        $this->migrateAndResetDocuments($raw['hits']['hits']);
 
         return isset($this->documents[$this->key]);
+    }
+
+    /**
+     * Flushes the internal data and propagate the new data
+     * @param array $rawDocuments
+     */
+    protected function migrateAndResetDocuments(array $rawDocuments)
+    {
+        $this->documents = [];
+        for ($i = 0;$i < count($rawDocuments); $i++) {
+            $this->documents[$this->key()+ $i] = $rawDocuments[$i];
+        }
     }
 
     /**
