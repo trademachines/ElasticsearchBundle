@@ -52,4 +52,9 @@ final class MultiField extends AbstractProperty
      * @var string
      */
     public $searchAnalyzer;
+    
+    /**
+     * @var string
+     */
+    public $termVector;
 }
