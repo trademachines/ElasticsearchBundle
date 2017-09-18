@@ -89,4 +89,9 @@ final class Property extends AbstractProperty
      * @var array
      */
     public $raw;
+
+    /**
+     * @var string
+     */
+    public $termVector;
 }
