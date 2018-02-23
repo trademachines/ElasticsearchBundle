@@ -14,8 +14,6 @@ install:
   - "echo 'script.disable_dynamic: false' | sudo tee -a /etc/elasticsearch/elasticsearch.yml"
   - "echo 'index.warmer.enabled: true' | sudo tee -a /etc/elasticsearch/elasticsearch.yml"
   - sudo service elasticsearch restart
-  - sudo pip install -q sphinx
-  - wget -q -O conf.py https://raw.githubusercontent.com/ongr-io/docs-aggregator/master/source/conf-travis.py
 
 before_script:
   - composer install --no-interaction
