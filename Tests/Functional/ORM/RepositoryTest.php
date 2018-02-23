@@ -683,7 +683,6 @@ class RepositoryTest extends ElasticsearchTestCase
 
         $repository->execute($search);
         $builder = $search->getQuery();
-        $this->assertNotInstanceOf('ONGR\ElasticsearchBundle\DSL\Bool\Bool', $builder, 'Query should not be bool.');
         $this->assertInstanceOf('ONGR\ElasticsearchBundle\DSL\Query\MatchAllQuery', $builder, 'Query should be same.');
     }
 
