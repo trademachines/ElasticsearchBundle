@@ -11,7 +11,6 @@
 
 namespace ONGR\ElasticsearchBundle\Tests\Functional\DSL\Filter;
 
-use ONGR\ElasticsearchBundle\DSL\Bool\Bool;
 use ONGR\ElasticsearchBundle\DSL\BuilderInterface;
 use ONGR\ElasticsearchBundle\DSL\Filter\BoolFilter;
 use ONGR\ElasticsearchBundle\DSL\Filter\IdsFilter;

@@ -1,21 +1,10 @@
 language: php
 
 php:
-  - 5.4
-  - 5.5
-  - 5.6
-  - 7.0
-  - hhvm
+  - 7.1
 
 env:
-  - ELASTICSEARCH="1.3.9"
-  - ELASTICSEARCH="1.4.5"
-  - ELASTICSEARCH="1.5.2"
-
-matrix:
-  allow_failures:
-    - php: hhvm
-    - php: 7.0
+  - ELASTICSEARCH="1.7.6"
 
 before_install:
  - curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${ELASTICSEARCH}.deb
@@ -29,22 +18,7 @@ install:
   - wget -q -O conf.py https://raw.githubusercontent.com/ongr-io/docs-aggregator/master/source/conf-travis.py
 
 before_script:
-  - if [[ $TRAVIS_PHP_VERSION = 5.6 && $ELASTICSEARCH = 1.4.4 ]]; then COVERAGE_NEEDED=true; else COVERAGE_NEEDED=false; fi
-  - if [[ $COVERAGE_NEEDED = false ]]; then phpenv config-rm xdebug.ini || true; fi
   - composer install --no-interaction
 
 script:
-  - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
-  - vendor/bin/phpcs -p --standard=$TRAVIS_BUILD_DIR/vendor/ongr/ongr-strict-standard/Ongr --ignore=vendor/,Tests/app/,Test/ElasticsearchTestCase.php ./
-  - sphinx-build -nWq -b html -c . Resources/doc _build/html
-
-after_script:
-  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && wget --post-data="" -q -O /dev/null http://readthedocs.org/build/ongr'
-  - >
-    if [[ $COVERAGE_NEEDED = true ]]; then
-        wget https://scrutinizer-ci.com/ocular.phar;
-        php ocular.phar code-coverage:upload --format=php-clover coverage.clover;
-    fi
-
-notifications:
-  slack: ongr:oyJ6inOcsttTBsnkuHV6dWbT
+  - vendor/bin/phpunit
