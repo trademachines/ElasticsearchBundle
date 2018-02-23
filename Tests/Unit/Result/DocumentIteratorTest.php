@@ -11,6 +11,7 @@
 
 namespace ONGR\ElasticsearchBundle\Tests\Unit\Result;
 
+use ONGR\ElasticsearchBundle\Result\Converter;
 use ONGR\ElasticsearchBundle\Result\DocumentIterator;
 use ONGR\ElasticsearchBundle\Result\Suggestion\OptionIterator;
 use ONGR\ElasticsearchBundle\Result\Suggestion\SuggestionEntry;
@@ -74,7 +75,7 @@ class DocumentIteratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIteration($rawData)
     {
-        $iterator = new DocumentIterator($rawData, $this->getTypesMapping(), $this->getBundleMapping());
+        $iterator = $this->getIterator($rawData);
         $this->assertContentEquals($iterator, ['Test header']);
     }
 
@@ -110,7 +111,7 @@ class DocumentIteratorTest extends \PHPUnit_Framework_TestCase
         ];
 
         // Check if inital data is correct.
-        $iterator = new DocumentIterator($rawData, $this->getTypesMapping(), $this->getBundleMapping());
+        $iterator = $this->getIterator($rawData);
         $this->assertContentEquals($iterator, [0 => 'Test header', 1 => 'Test header2', 2 => 'Test header3']);
 
         // Set a few numeric and string offsets.
@@ -147,7 +148,7 @@ class DocumentIteratorTest extends \PHPUnit_Framework_TestCase
         $this->assertContentEquals($iterator, $expectedHeaders);
 
         // Check what happens when we have only string offsets.
-        $iterator = new DocumentIterator([], $this->getTypesMapping(), $this->getBundleMapping());
+        $iterator = $this->getIterator([]);
         $iterator['testOffset'] = $rawData['hits']['hits'][0];
         $iterator['a'] = $rawData['hits']['hits'][1];
         $iterator[] = $rawData['hits']['hits'][2];
@@ -159,7 +160,7 @@ class DocumentIteratorTest extends \PHPUnit_Framework_TestCase
         $this->assertContentEquals($iterator, $expectedHeaders);
 
         // Check what happens when we have only string offsets.
-        $iterator = new DocumentIterator([], $this->getTypesMapping(), $this->getBundleMapping());
+        $iterator = $this->getIterator([]);
         $iterator[] = $rawData['hits']['hits'][2];
         $expectedHeaders = [
             0 => 'Test header3',
@@ -186,7 +187,7 @@ class DocumentIteratorTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $iterator = new DocumentIterator($rawData, $this->getTypesMapping(), $this->getBundleMapping());
+        $iterator = $this->getIterator($rawData);
         $iterator['test'] = $rawData['hits']['hits'][0];
         $iterator[] = $rawData['hits']['hits'][0];
 
@@ -216,7 +217,7 @@ class DocumentIteratorTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $iterator = new DocumentIterator($rawData, $this->getTypesMapping(), $this->getBundleMapping());
+        $iterator = $this->getIterator($rawData);
 
         $this->assertTrue(isset($iterator[0]), 'Item should be set from initial data.');
         unset($iterator[0]);
@@ -238,7 +239,7 @@ class DocumentIteratorTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $iterator = new DocumentIterator($rawData, [], []);
+        $iterator = $this->getIterator($rawData, [], []);
 
         $this->assertInstanceOf(
             'ONGR\ElasticsearchBundle\Result\Aggregation\AggregationIterator',
@@ -275,7 +276,7 @@ class DocumentIteratorTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $iterator = new DocumentIterator($rawData, [], []);
+        $iterator = $this->getIterator($rawData, [], []);
         $suggestions = $iterator->getSuggestions();
 
         $this->assertInstanceOf(
@@ -310,6 +311,15 @@ class DocumentIteratorTest extends \PHPUnit_Framework_TestCase
             unset($expectedHeaders[$key]);
         }
         $this->assertEmpty($expectedHeaders);
+    }
+
+    private function getIterator($rawData, $types = null, $bundle = null)
+    {
+        $types = $types ?: $this->getTypesMapping();
+        $bundle = $bundle ?: $this->getBundleMapping();
+        $converter = new Converter($types, $bundle);
+
+        return new DocumentIterator($rawData, $types, $bundle, $converter);
     }
 
     /**
