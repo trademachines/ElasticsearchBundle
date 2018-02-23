@@ -114,7 +114,7 @@ class SuggestionsIteratorTest extends ElasticsearchTestCase
         // Case #3, Multiple suggesters.
         $term = new Term('description', 'ipsu');
         $phrase = new Phrase('description', 'Lorm adip');
-        $expectedOptions = [new SimpleOption('lorem adip', 0.0), new TermOption('ipsum', 0.0, 3)];
+        $expectedOptions = [new TermOption('ipsum', 0.0, 3), new SimpleOption('lorem adip', 0.0)];
 
         $out[] = ['suggesters' => [$term, $phrase], 'expectedOptions' => $expectedOptions];
 
@@ -122,9 +122,9 @@ class SuggestionsIteratorTest extends ElasticsearchTestCase
         $term = new Term('description', 'distibutd');
         $phrase = new Phrase('description', 'Lorm adip');
         $expectedOptions = [
-            new SimpleOption('lorem adip', 0.0),
             new TermOption('disributed', 0.0, 1),
             new TermOption('distributed', 0.0, 1),
+            new SimpleOption('lorem adip', 0.0),
         ];
 
         $out[] = ['suggesters' => [$term, $phrase], 'expectedOptions' => $expectedOptions];
