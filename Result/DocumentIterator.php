@@ -59,7 +59,7 @@ class DocumentIterator extends AbstractResultsIterator
      * @param array     $bundlesMapping
      * @param Converter $converter
      */
-    public function __construct($rawData, $typesMapping, $bundlesMapping, $converter)
+    public function __construct($rawData, $typesMapping, $bundlesMapping, $converter = null)
     {
         $this->rawData = $rawData;
         $this->typesMapping = $typesMapping;
