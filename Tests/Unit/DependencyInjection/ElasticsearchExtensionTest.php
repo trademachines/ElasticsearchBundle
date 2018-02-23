@@ -32,7 +32,9 @@ class ElasticsearchExtensionTest extends \PHPUnit_Framework_TestCase
             'elasticsearch' => [
                 'document_dir' => 'customDir',
                 'connections' => [
-                    'test' => ['index_name' => 'test'],
+                    'test' => [
+                        'index_name' => 'test',
+                    ],
                 ],
                 'managers' => [
                     'test' => [
@@ -53,6 +55,7 @@ class ElasticsearchExtensionTest extends \PHPUnit_Framework_TestCase
                 'index_name' => 'test',
                 'hosts' => ['127.0.0.1:9200'],
                 'settings' => [],
+                'timeout' => 0
             ],
         ];
 
