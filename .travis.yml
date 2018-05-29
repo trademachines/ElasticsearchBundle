@@ -1,14 +1,16 @@
 language: php
 
 php:
+  - 5.5
+  - 7.0
   - 7.1
 
 env:
   - ELASTICSEARCH="1.7.6"
 
 before_install:
- - curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${ELASTICSEARCH}.deb
- - sudo dpkg -i elasticsearch-${ELASTICSEARCH}.deb
+  - curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${ELASTICSEARCH}.deb
+  - sudo dpkg -i elasticsearch-${ELASTICSEARCH}.deb
 
 install:
   - "echo 'script.disable_dynamic: false' | sudo tee -a /etc/elasticsearch/elasticsearch.yml"
