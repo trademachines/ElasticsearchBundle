@@ -4,6 +4,7 @@ php:
   - 5.5
   - 7.0
   - 7.1
+  - 7.2
 
 env:
   - ELASTICSEARCH="1.7.6"
