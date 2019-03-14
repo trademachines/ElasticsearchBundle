@@ -99,12 +99,7 @@ class Converter
             }
 
             if ($aliases[$name]['type'] === 'date') {
-                $newValue = \DateTime::createFromFormat(
-                    isset($aliases[$name]['format']) ? $aliases[$name]['format'] : \DateTime::ISO8601,
-                    $value
-                );
-                
-                $value = $newValue === false ? $value : $newValue;
+                $value = $this->getDateValue($value, $aliases[$name]);
             }
 
             if (array_key_exists('aliases', $aliases[$name])) {
@@ -174,6 +169,22 @@ class Converter
         }
 
         return $array;
+    }
+
+    /**
+     * @param string $value
+     * @param array  $info
+     *
+     * @return string|\DateTime
+     */
+    protected function getDateValue($value, $info)
+    {
+        $newValue = \DateTime::createFromFormat(
+            isset($info['format']) ? $info['format'] : \DateTime::ISO8601,
+            $value
+        );
+
+        return $newValue === false ? $value : $newValue;
     }
 
     /**
